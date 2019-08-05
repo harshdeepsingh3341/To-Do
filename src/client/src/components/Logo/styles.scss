@@ -1,0 +1,13 @@
+@import "../../App";
+
+.logo-container {
+  padding: 5px;
+  a {
+    color: white;
+    transition: $transition-time;
+  }
+
+  a:hover {
+    color: whitesmoke;
+  }
+}
