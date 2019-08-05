@@ -1,0 +1,46 @@
+@import "../../App";
+
+.inputFields-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  color: white;
+
+  .field-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .inputText, .inputEmail, .inputPassword, .inputSubmit {
+      border-bottom: thin solid $black;
+      line-height: 30px;
+      width: 100%;
+      transition: $transition-time;
+    }
+
+    .inputSubmit{
+      border: none;
+      border-radius: $border-radius;
+      background-color: $secondary-color;
+      cursor: pointer;
+    }
+
+    .inputSubmit:hover{
+      background-color: $secondary-color-dark;
+    }
+
+    .inputText:focus, .inputEmail:focus, .inputPassword:focus {
+      border-bottom: thin solid $secondary-color;
+    }
+
+    .error {
+      color: red;
+      font-style: italic;
+      font-size: 13px;
+      width: 100%;
+      text-transform: capitalize;
+      margin: 9px 0;
+      text-align: right;
+    }
+  }
+}
