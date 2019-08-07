@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './styles.scss';
 import PropTypes from 'prop-types';
 
@@ -75,15 +75,15 @@ export const InputEmail = (props) => {
 			}
 		} = event;
 		if (value === '') {
-			setIsError(true);
-			setErrorMessage('required field');
+			required && setIsError(true);
+			required && setErrorMessage('required field');
 		} else {
 			if (value.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/)) {
-				setIsError(false);
-				setErrorMessage('');
+				required && setIsError(false);
+				required && setErrorMessage('');
 			} else {
-				setIsError(true);
-				setErrorMessage('enter proper email id');
+				required && setIsError(true);
+				required && setErrorMessage('enter proper email id');
 			}
 		}
 		handleChangeFromProps(event);
@@ -114,6 +114,7 @@ export const InputEmail = (props) => {
 				}
 			/>
 			{
+				required &&
 				isError &&
 				<span className="error">
 				{
@@ -156,7 +157,7 @@ export const InputPassword = (props) => {
 	} = props;
 	const [isError, setIsError] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
-	useEffect(() => handleError('password', isError));
+	useEffect(() => required && handleError('password', isError));
 	const handleChange = (event) => {
 		const {
 			target: {
@@ -164,11 +165,11 @@ export const InputPassword = (props) => {
 			}
 		} = event;
 		if (value === '') {
-			setIsError(true);
-			setErrorMessage('required field')
+			required && setIsError(true);
+			required && setErrorMessage('required field')
 		} else {
-			setIsError(false);
-			setErrorMessage('');
+			required && setIsError(false);
+			required && setErrorMessage('');
 		}
 		handleChangeFromProps(event);
 	};
@@ -199,6 +200,7 @@ export const InputPassword = (props) => {
 				onChange={handleChange}
 			/>
 			{
+				required &&
 				isError &&
 				<span className="error">
 					{
