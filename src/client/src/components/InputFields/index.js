@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './styles.scss';
 import PropTypes from 'prop-types';
+import Error from "../Error";
 
 //Input type Text
 export const InputText = (props) => {
@@ -116,11 +117,14 @@ export const InputEmail = (props) => {
 			{
 				required &&
 				isError &&
-				<span className="error">
-				{
-					errorMessage
-				}
-				</span>
+				<Error
+					message={errorMessage}
+					styles={
+						{
+							textAlign: 'right'
+						}
+					}
+				/>
 			}
 		</div>
 	)
@@ -202,11 +206,14 @@ export const InputPassword = (props) => {
 			{
 				required &&
 				isError &&
-				<span className="error">
-					{
-						errorMessage
+				<Error
+					message={errorMessage}
+					styles={
+						{
+							textAlign: 'right'
+						}
 					}
-				</span>
+				/>
 			}
 		</div>
 	)
