@@ -1,0 +1,40 @@
+@import "../../App";
+
+.header-container {
+  background-color: $primary-color;
+  padding: 10px 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+
+  .search-container {
+    display: flex;
+    align-items: stretch;
+    font-weight: lighter;
+    transition: $transition-time;
+    flex-basis: 20%;
+    margin: 0 40px;
+    border-radius: $border-radius;
+
+    .search-form {
+      display: flex;
+      align-items: center;
+
+      .search-icon {
+        cursor: text;
+        margin: 5px;
+      }
+
+      .search-input {
+        color: white;
+        vertical-align: top;
+        font-size: 16px;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .search-container:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+}

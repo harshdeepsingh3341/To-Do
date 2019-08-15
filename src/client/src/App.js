@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useContext} from 'react';
+import './App.scss';
+import {BrowserRouter} from "react-router-dom";
+import UserAuthContextHoc, {UserAuthContext} from "./UserAuthContext";
+import {library} from '@fortawesome/fontawesome-svg-core'
+import {faTasks} from "@fortawesome/free-solid-svg-icons";
+import Header from "./containerComponents/Header";
+import SideBar from "./containerComponents/SideBar";
+import AppRouter from "./App.router";
 
-const App =() => {
+library.add(
+	faTasks
+);
+
+const App = (props) => {
+	const [isLoggedIn] = useContext(UserAuthContext);
+	console.log('app', isLoggedIn);
 	return (
-		<div className="App">
-			<header className="App-header">
-				<img src={logo} className="App-logo" alt="logo"/>
-				<p>
-					Edit <code>src/App.js</code> and save to reload.
-				</p>
-				<a
-					className="App-link"
-					href="https://reactjs.org"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					Learn React
-				</a>
-			</header>
-		</div>
+		<BrowserRouter>
+			{
+				isLoggedIn && <Header/>
+			}
+			<div className="app-container">
+				{
+					isLoggedIn && <SideBar/>
+				}
+				<AppRouter/>
+			</div>
+
+		</BrowserRouter>
+
 	);
 };
 
-export default App;
+export default UserAuthContextHoc(App);

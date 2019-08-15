@@ -15,20 +15,38 @@
     margin-bottom: 30px;
   }
 
-  .loginFields-container{
+  .loginFields-container {
     margin: auto;
     width: 40%;
     border: thin solid whitesmoke;
     padding: 20px;
     border-radius: $border-radius;
-    .header{
+    -webkit-box-shadow: 2px 2px 12px -9px rgba(0,0,0,0.75);
+    -moz-box-shadow: 2px 2px 12px -9px rgba(0,0,0,0.75);
+    box-shadow: 2px 2px 12px -9px rgba(0,0,0,0.75);
+
+    .header {
       margin: 15px 0;
       font-size: 25px;
       font-weight: bold;
       color: $secondary-color;
     }
-    input{
+
+    input {
       margin: 10px 0;
+    }
+
+    .signup {
+      font-size: 14px;
+      color: $black;
+
+      a {
+        color: inherit;
+      }
+      a:hover{
+        color: blue;
+        text-decoration: underline;
+      }
     }
   }
 }

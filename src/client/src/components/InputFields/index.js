@@ -2,19 +2,45 @@ import React, {useEffect, useState} from 'react';
 import './styles.scss';
 import PropTypes from 'prop-types';
 import Error from "../Error";
+import {ERROR_MESSAGES} from "../../constants";
 
 //Input type Text
 export const InputText = (props) => {
 	const {
 		name,
 		id,
-		handleChange,
+		handleChange: handleChangeFromProps,
 		placeholder,
 		value,
-		required
+		required,
+		handleError,
+		styles
 	} = props;
+	const [isError, setIsError] = useState(false);
+	const [errorMessage, setErrorMessage] = useState('');
+	useEffect(
+		() => required && handleError(name, isError),
+		[isError]
+	);
+	const handleChange = (event) => {
+		const {
+			target: {
+				value
+			}
+		} = event;
+		if (required) {
+			if (value === '') {
+				setIsError(true);
+				setErrorMessage(ERROR_MESSAGES.REQUIRED_FIELD_EMPTY)
+			} else {
+				setIsError(false);
+				setErrorMessage('');
+			}
+		}
+		handleChangeFromProps(event);
+	};
 	return (
-		<React.Fragment>
+		<div className="field-container">
 			<input
 				type="text"
 				className="inputText"
@@ -27,9 +53,31 @@ export const InputText = (props) => {
 						''
 				}`}
 				value={value}
+				style={
+					{
+						...styles,
+						borderBottomColor: isError ?
+							'red' :
+							'',
+						color: isError ?
+							'red' :
+							''
+					}
+				}
 			/>
-		</React.Fragment>
-
+			{
+				required &&
+				isError &&
+				<Error
+					message={errorMessage}
+					styles={
+						{
+							textAlign: 'right'
+						}
+					}
+				/>
+			}
+		</div>
 	)
 };
 InputText.propTypes = {
@@ -38,7 +86,9 @@ InputText.propTypes = {
 	placeholder: PropTypes.string.isRequired,
 	value: PropTypes.string,
 	handleChange: PropTypes.func,
-	required: PropTypes.bool
+	required: PropTypes.bool,
+	handleError: PropTypes.func,
+	styles: PropTypes.object
 };
 InputText.defaultProps = {
 	name: 'inputText',
@@ -46,7 +96,9 @@ InputText.defaultProps = {
 	placeholder: 'Input Type Text',
 	value: '',
 	handleChange: () => console.log('Input Type Text'),
-	required: false
+	required: false,
+	handleError: () => console.log('Input Type Text Error'),
+	styles: {}
 };
 
 //Input type Email
@@ -58,7 +110,8 @@ export const InputEmail = (props) => {
 		value,
 		handleChange: handleChangeFromProps,
 		required,
-		handleError
+		handleError,
+		styles
 	} = props;
 	const [isError, setIsError] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
@@ -68,23 +121,26 @@ export const InputEmail = (props) => {
 		errorMessage: ''
 	}
 	*/
-	useEffect(() => handleError('email', isError));
+	useEffect(
+		() => handleError(name, isError),
+		[isError]
+	);
 	const handleChange = (event) => {
 		const {
 			target: {
 				value
 			}
 		} = event;
-		if (value === '') {
-			required && setIsError(true);
-			required && setErrorMessage('required field');
+		if (required && value === '') {
+			setIsError(true);
+			setErrorMessage(ERROR_MESSAGES.REQUIRED_FIELD_EMPTY);
 		} else {
 			if (value.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/)) {
-				required && setIsError(false);
-				required && setErrorMessage('');
+				setIsError(false);
+				setErrorMessage('');
 			} else {
-				required && setIsError(true);
-				required && setErrorMessage('enter proper email id');
+				setIsError(true);
+				setErrorMessage(ERROR_MESSAGES.EMAIL_NOT_FORMATTED);
 			}
 		}
 		handleChangeFromProps(event);
@@ -105,6 +161,7 @@ export const InputEmail = (props) => {
 				onChange={handleChange}
 				style={
 					{
+						...styles,
 						borderBottomColor: isError ?
 							'red' :
 							'',
@@ -136,7 +193,8 @@ InputEmail.propTypes = {
 	value: PropTypes.string,
 	handleChange: PropTypes.func,
 	required: PropTypes.bool,
-	handleError: PropTypes.func
+	handleError: PropTypes.func,
+	styles: PropTypes.object
 };
 InputEmail.defaultProps = {
 	name: 'inputEmail',
@@ -145,7 +203,8 @@ InputEmail.defaultProps = {
 	value: '',
 	handleChange: () => console.log('Input Type Email'),
 	required: false,
-	handleError: () => console.log('Input Type Email Error')
+	handleError: () => console.log('Input Type Email Error'),
+	styles: {}
 };
 
 //Input type Password
@@ -157,24 +216,41 @@ export const InputPassword = (props) => {
 		handleChange: handleChangeFromProps,
 		required,
 		value,
-		handleError
+		handleError,
+		styles,
+		error
 	} = props;
-	const [isError, setIsError] = useState(false);
-	const [errorMessage, setErrorMessage] = useState('');
-	useEffect(() => required && handleError('password', isError));
+	const [isError, setIsError] = useState(error.isError);
+	const [errorMessage, setErrorMessage] = useState(error.errorMessage);
+	useEffect(
+		() => required && handleError(name, isError),
+		[isError]
+	);
+	useEffect(
+		() => {
+			if (error.isError !== isError) {
+				setIsError(error.isError);
+				setErrorMessage(error.errorMessage);
+			}
+		},
+		[error]
+	)
 	const handleChange = (event) => {
 		const {
 			target: {
 				value
 			}
 		} = event;
-		if (value === '') {
-			required && setIsError(true);
-			required && setErrorMessage('required field')
-		} else {
-			required && setIsError(false);
-			required && setErrorMessage('');
+		if (required) {
+			if (value === '') {
+				required && setIsError(true);
+				required && setErrorMessage(ERROR_MESSAGES.REQUIRED_FIELD_EMPTY)
+			} else {
+				required && setIsError(false);
+				required && setErrorMessage('');
+			}
 		}
+
 		handleChangeFromProps(event);
 	};
 	return (
@@ -193,6 +269,7 @@ export const InputPassword = (props) => {
 				value={value}
 				style={
 					{
+						...styles,
 						borderBottomColor: isError ?
 							'red' :
 							'',
@@ -225,16 +302,28 @@ InputPassword.propTypes = {
 	value: PropTypes.string,
 	handleChange: PropTypes.func,
 	required: PropTypes.bool,
-	handleError: PropTypes.func
+	handleError: PropTypes.func,
+	styles: PropTypes.object,
+	error: PropTypes.shape(
+		{
+			isError: PropTypes.bool.isRequired,
+			errorMessage: PropTypes.string.isRequired
+		}
+	)
 };
-InputText.defaultProps = {
+InputPassword.defaultProps = {
 	name: 'inputPassword',
 	id: 'inputPassword',
 	placeholder: 'Input Type Password',
 	value: '',
 	handleChange: () => console.log('Input Type Password'),
 	required: false,
-	handleError: () => console.log('Input Type Password Error')
+	handleError: () => console.log('Input Type Password Error'),
+	styles: {},
+	error: {
+		isError: false,
+		errorMessage: ''
+	}
 };
 
 //Input type Submit
@@ -243,7 +332,8 @@ export const InputSubmit = (props) => {
 		text,
 		handleClick,
 		required,
-		isDisabled
+		isDisabled,
+		styles
 	} = props;
 	return (
 		<div className="field-container">
@@ -253,6 +343,7 @@ export const InputSubmit = (props) => {
 				onClick={handleClick}
 				style={
 					{
+						...styles,
 						opacity: isDisabled ?
 							0.4 :
 							1,
@@ -273,12 +364,14 @@ export const InputSubmit = (props) => {
 InputSubmit.propTypes = {
 	text: PropTypes.string.isRequired,
 	handleClick: PropTypes.func,
-	isDisabled: PropTypes.bool
+	isDisabled: PropTypes.bool,
+	styles: PropTypes.object
 };
 InputSubmit.defaultProps = {
 	text: 'Input Type Submit',
 	handleClick: () => console.log('Input Type Submit'),
-	isDisabled: false
+	isDisabled: false,
+	styles: {}
 };
 
 //Input Fields Component
