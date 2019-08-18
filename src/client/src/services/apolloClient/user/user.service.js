@@ -8,9 +8,6 @@ const client = new ApolloClient(
 		link: authLink.concat(
 			new HttpLink(
 				{
-					headers: {
-						somethingNew: 'somethingNew'
-					},
 					uri: `${API_ENDPONT}/user`
 				}
 			)
@@ -30,20 +27,57 @@ export const loginUser = async (email, password) => {
 			cache: new InMemoryCache()
 		}
 	);
-	console.log('loginUser', client)
 	const query = gql`
         {
-            loginUser(email: "${email}", password: "${password}"){
+            loginUser(
+                email: "${email}"
+                password: "${password}"
+            ){
                 status
                 message
                 data
             }
         }
-	`
+	`;
 	const {data} = await client.query({query});
 	console.log('loginUser ', data);
 	return {
 		...data.loginUser,
 		data: JSON.parse(data.loginUser.data)
+	}
+};
+
+export const signupUser = async (name, email, password) => {
+	const client = new ApolloClient(
+		{
+			link: new HttpLink(
+				{
+					uri: `${API_ENDPONT}/user/signup`
+				}
+			),
+			cache: new InMemoryCache()
+		}
+	);
+	const query = gql`
+        mutation SignupUser{
+            signupUser(
+                name:"${name}"
+                email: "${email}"
+                password: "${password}"
+            ){
+                status
+                message
+                data
+            }
+        }
+	`;
+	const {data} = await client.mutate({mutation: query});
+	console.log('sign up server ', {
+		...data.signupUser,
+		data: JSON.parse(data.signupUser.data)
+	});
+	return {
+		...data.signupUser,
+		data: JSON.parse(data.signupUser.data)
 	}
 };
