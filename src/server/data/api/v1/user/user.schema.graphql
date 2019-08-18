@@ -1,0 +1,26 @@
+type Query{
+    loginUser(
+        email: String!,
+        password: String!
+    ): Response
+}
+
+type Mutation{
+    signupUser(
+        name: String!,
+        email: String!,
+        password:String!
+    ): Response
+}
+
+type User{
+    name: String!
+    email: String!,
+    jwtToken: String!
+}
+
+type Response {
+    status: Int!,
+    message: String!,
+    data: String!
+}
