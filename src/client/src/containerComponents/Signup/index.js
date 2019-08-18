@@ -4,6 +4,8 @@ import Logo from "../../components/Logo";
 import BackArrow from "../../components/BackArrow";
 import {InputEmail, InputFields, InputPassword, InputSubmit, InputText} from "../../components/InputFields";
 import {ERROR_MESSAGES} from "../../constants";
+import {signupUser} from "../../services/apolloClient/user/user.service";
+import SuccessAlert from "../../components/SuccessSweetAlert";
 
 const Signup = (props) => {
 	const [name, setName] = useState({
@@ -24,6 +26,9 @@ const Signup = (props) => {
 		value: '',
 		isError: false
 	});
+	const [signUpStatus, setSignUpStatus] = useState({
+		signUpSuccess: false
+	});
 
 	useEffect(
 		() => {
@@ -34,7 +39,20 @@ const Signup = (props) => {
 			}
 		},
 		[password.value, rePassword.value, password.isError, rePassword.isError]
-	)
+	);
+
+	const handleSubmit = () => {
+		signupUser(
+			name.value,
+			email.value,
+			password.value
+		)
+			.then(response => {
+				setSignUpStatus({
+					signUpSuccess: response.data.signUpUser
+				});
+			})
+	};
 
 	const handleChange = ({
 		                      target: {
@@ -56,6 +74,13 @@ const Signup = (props) => {
 
 	return (
 		<div className="signup-container">
+			{
+				signUpStatus.signUpSuccess &&
+				<SuccessAlert
+					title={"Sign Up Successful"}
+					onSuccess={() => props.history.push("/")}
+				/>
+			}
 			<div className="signup-logo-container">
 				<Logo
 					size={3}
@@ -129,7 +154,7 @@ const Signup = (props) => {
 						}
 					/>
 					<InputSubmit
-						handleClick={() => console.log('submit signup click')}
+						handleClick={handleSubmit}
 						isDisabled={name.isError || email.isError || password.isError}
 						text={"Sign Up"}
 					/>
