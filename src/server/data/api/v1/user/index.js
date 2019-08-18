@@ -1,11 +1,6 @@
 const router = require('express').Router();
 const graphqlHTTP = require('express-graphql');
-const {buildSchema} = require('graphql');
-const {
-	makeExecutableSchema
-} = require('graphql-tools');
-const fs = require('fs');
-const authorization = require('../../../../utils/authorization');
+const authorization = require('../../../../utils/middlewares/authorization');
 
 const userSchema = require('./user.schema');
 const {initUser} = require("./user.model");
@@ -17,12 +12,19 @@ router.get(
 	}
 );
 
-router.use('/login',
+router.post('/login',
 	graphqlHTTP({
 		schema: userSchema,
 		graphiql: true
 	})
-)
+);
+
+router.post('/signup',
+	graphqlHTTP({
+		schema: userSchema,
+		graphiql: true
+	})
+);
 
 router.use('*',
 	authorization,
