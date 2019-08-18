@@ -40,3 +40,8 @@ exports.getUser = (email) => {
 		}
 	)
 };
+
+exports.saveUser = (user) => {
+	const newUser = new userModel({...user});
+	return newUser.save();
+};
