@@ -30,4 +30,14 @@ export const ERROR_MESSAGES = {
 	REQUIRED_FIELD_EMPTY: 'required field',
 	EMAIL_NOT_FORMATTED: 'enter proper email id',
 	VERIFY_PASSWORD: 'passwords entered do not match'
-}
+};
+
+export const SWEET_ALERT_TYPES = [
+	"success",
+	"error",
+	"warning",
+	"info",
+	"question"
+];
+
+export const COPYRIGHT_TEXT = "&copy; Copyright 2019";
